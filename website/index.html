@@ -3684,8 +3684,7 @@ function renderChatArea(){
         <button class="ib mob-hide" onclick="openDisappearTimerPicker('${room.id}')" title="Disappearing messages">⏱️</button>
         <button class="ib mob-hide" onclick="renameRoom('${room.id}')" title="Rename chat">✏️</button>
         <button class="ib" onclick="toggleChatSearch()" title="Search">🔍</button>
-        <button class="ib" onclick="simulateCall('voice')" title="Voice call">📞</button>
-        <button class="ib" onclick="simulateCall('video')" title="Video call">📹</button>
+        ${room.type==='direct'?'<button class="ib" onclick="simulateCall('voice')" title="Voice call">📞</button><button class="ib" onclick="simulateCall('video')" title="Video call">📹</button>':''}
         <button class="ib" onclick="toggleProfile()">ℹ️</button>
         <button class="ib ch-back" onclick="backToSidebar()" title="Back">←</button>
       </div>
@@ -5269,7 +5268,7 @@ function _showIncomingCallUI(callId){
         <div style="position:absolute;inset:0;border-radius:50%;background:rgba(26,108,245,.2);animation:_cRipple 2.2s ease-out infinite"></div>
         <div style="position:absolute;inset:-22px;border-radius:50%;background:rgba(26,108,245,.1);animation:_cRipple 2.2s ease-out infinite .75s"></div>
         <div style="position:absolute;inset:-44px;border-radius:50%;background:rgba(26,108,245,.05);animation:_cRipple 2.2s ease-out infinite 1.5s"></div>
-        <div style="width:120px;height:120px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 4px rgba(26,108,245,.55),0 12px 44px rgba(0,0,0,.65)">
+        <div style="width:120px;height:120px;border-radius:50%;overflow:hidden;box-shadow:0 12px 44px rgba(0,0,0,.5)">
           ${avatarEl(caller,120)}
         </div>
       </div>
@@ -5485,7 +5484,7 @@ function _showCallUI(type, peer, status){
     '<div style="position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;padding-top:max(env(safe-area-inset-top,0px),52px);padding-bottom:24px">'+
       '<div style="position:relative;width:'+wrapSize+';height:'+wrapSize+';display:flex;align-items:center;justify-content:center;margin-bottom:22px">'+
         rippleHtml+
-        '<div style="width:'+avSize+';height:'+avSize+';border-radius:50%;overflow:hidden;box-shadow:0 0 0 3px rgba(255,255,255,'+ringOpacity+'),0 8px 36px rgba(0,0,0,.55)">'+
+        '<div style="width:'+avSize+';height:'+avSize+';border-radius:50%;overflow:hidden;box-shadow:0 8px 36px rgba(0,0,0,.45)">'+
           avatarEl(peer,104)+
         '</div>'+
       '</div>'+
