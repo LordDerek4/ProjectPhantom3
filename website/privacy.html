@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — NexusChat</title>
+<link rel="icon" type="image/svg+xml" href="nexuschat-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg0:#040912;--bg1:rgba(8,18,50,0.9);--border:rgba(255,255,255,0.08);
+    --txt1:#ddeeff;--txt2:#7898cc;--txt3:#4a607e;
+    --acc:#1a6cf5;--acc3:#4f8eff;--font:'Geist','Inter',sans-serif;
+  }
+  html,body{min-height:100%;background:var(--bg0);color:var(--txt1);font-family:var(--font);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 25%,rgba(26,108,245,.15) 0%,transparent 45%),radial-gradient(ellipse at 85% 8%,rgba(10,61,168,.12) 0%,transparent 40%);pointer-events:none;z-index:0}
+  .wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:48px 24px 80px}
+  .logo-row{display:flex;align-items:center;gap:12px;margin-bottom:40px}
+  .logo-row img{width:40px;height:40px;border-radius:10px}
+  .logo-row a{color:var(--acc3);text-decoration:none;font-weight:600;font-size:18px}
+  h1{font-size:28px;font-weight:700;margin-bottom:8px;color:var(--txt1)}
+  .meta{font-size:13px;color:var(--txt3);margin-bottom:40px}
+  h2{font-size:17px;font-weight:600;color:var(--txt1);margin:32px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+  p{color:var(--txt2);margin-bottom:12px}
+  ul{color:var(--txt2);padding-left:20px;margin-bottom:12px}
+  ul li{margin-bottom:6px}
+  a{color:var(--acc3);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .contact-box{margin-top:40px;padding:20px 24px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px}
+  .contact-box p{margin:0;color:var(--txt2)}
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--border);text-align:center;font-size:12px;color:var(--txt3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo-row">
+    <img src="nexuschat-logo.svg" alt="NexusChat">
+    <a href="/">← Back to NexusChat</a>
+  </div>
+
+  <h1>Privacy Policy</h1>
+  <p class="meta">Last updated: May 2026 &nbsp;·&nbsp; Effective date: May 2026</p>
+
+  <h2>1. Introduction</h2>
+  <p>Welcome to NexusChat ("we", "our", or "us"). This Privacy Policy explains how we collect, use, store, and protect your personal information when you use the NexusChat application and website (nexus-chat.uk). By using NexusChat you agree to the practices described here.</p>
+
+  <h2>2. Information We Collect</h2>
+  <p>We collect only what is necessary to provide the service:</p>
+  <ul>
+    <li><strong>Phone number</strong> — used for account creation and verification.</li>
+    <li><strong>Username &amp; handle</strong> — your display name and unique identifier in the app.</li>
+    <li><strong>Profile picture</strong> — optional image you choose to upload.</li>
+    <li><strong>Messages</strong> — text and media messages sent within the app, stored securely in our database.</li>
+    <li><strong>Contact list</strong> — the users you choose to add as contacts, stored as user IDs.</li>
+    <li><strong>Call metadata</strong> — connection data (not call content) used to establish voice and video calls.</li>
+    <li><strong>Push notification tokens</strong> — device tokens required to send you notifications (if you grant permission).</li>
+    <li><strong>Device &amp; usage data</strong> — basic technical information such as device type and app version, used for debugging.</li>
+  </ul>
+  <p>We do <strong>not</strong> collect passwords in plain text, payment card details, or precise location data.</p>
+
+  <h2>3. How We Use Your Information</h2>
+  <ul>
+    <li>To create and manage your account.</li>
+    <li>To deliver messages and enable voice/video calls between users.</li>
+    <li>To send push notifications about new messages or contact requests.</li>
+    <li>To display your profile to other users when they search or interact with you.</li>
+    <li>To improve app reliability and fix bugs.</li>
+  </ul>
+
+  <h2>4. Data Storage &amp; Security</h2>
+  <p>Your data is stored securely using <a href="https://supabase.com" target="_blank" rel="noopener">Supabase</a>, a hosted PostgreSQL database service with row-level security policies. Media files (profile pictures, shared images) are stored in Supabase Storage with public access only to files you intentionally share.</p>
+  <p>We use industry-standard encryption in transit (HTTPS/TLS) for all communications. Access to the database is restricted by role-based policies; only you can read or modify your own private data.</p>
+
+  <h2>5. Data Sharing</h2>
+  <p>We do <strong>not</strong> sell your personal information. We share data only in these circumstances:</p>
+  <ul>
+    <li><strong>With other NexusChat users</strong> — your username, handle, and profile picture are visible to users you interact with or who search for you.</li>
+    <li><strong>Service providers</strong> — Supabase (database/storage), Google Fonts (typography). These providers have their own privacy policies.</li>
+    <li><strong>Legal requirements</strong> — if required by law or valid legal process.</li>
+  </ul>
+
+  <h2>6. Voice &amp; Video Calls</h2>
+  <p>NexusChat uses WebRTC technology for real-time voice and video calls. Call audio and video streams travel peer-to-peer between devices wherever possible. When a direct connection cannot be established, traffic is relayed through TURN servers. Call content is not recorded or stored.</p>
+
+  <h2>7. Your Rights</h2>
+  <p>Depending on your location you may have rights including:</p>
+  <ul>
+    <li><strong>Access</strong> — request a copy of your data.</li>
+    <li><strong>Correction</strong> — update inaccurate information via your profile settings.</li>
+    <li><strong>Deletion</strong> — request deletion of your account and associated data.</li>
+    <li><strong>Portability</strong> — request your data in a portable format.</li>
+    <li><strong>Objection</strong> — object to certain uses of your data.</li>
+  </ul>
+  <p>To exercise any of these rights, contact us at <a href="mailto:DMFreelance2026@outlook.com">DMFreelance2026@outlook.com</a>.</p>
+
+  <h2>8. Data Retention</h2>
+  <p>We retain your data for as long as your account is active. If you delete your account, we will delete your personal information within 30 days, except where we are required by law to retain it longer.</p>
+
+  <h2>9. Children's Privacy</h2>
+  <p>NexusChat is not directed at children under the age of 13 (or the equivalent minimum age in your jurisdiction). We do not knowingly collect personal information from children. If you believe a child has provided us with personal information, please contact us immediately.</p>
+
+  <h2>10. Cookies &amp; Local Storage</h2>
+  <p>NexusChat uses your browser's <code>localStorage</code> to save your session and preferences locally on your device. We do not use tracking cookies or third-party advertising cookies.</p>
+
+  <h2>11. Changes to This Policy</h2>
+  <p>We may update this Privacy Policy from time to time. When we do, we will revise the "Last updated" date at the top. Continued use of NexusChat after changes means you accept the updated policy.</p>
+
+  <div class="contact-box">
+    <p>Questions about this Privacy Policy? Contact us at<br>
+    <a href="mailto:DMFreelance2026@outlook.com">DMFreelance2026@outlook.com</a></p>
+  </div>
+
+  <footer>© 2026 NexusChat. All rights reserved. &nbsp;·&nbsp; <a href="/terms">Terms of Service</a></footer>
+</div>
+</body>
+</html>
