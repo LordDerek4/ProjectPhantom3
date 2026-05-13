@@ -4899,26 +4899,22 @@ async function _startAdaptiveBitrate(pc, isVideo) {
   }, 5000);
 }
 
-const ICE_SERVERS = {
-  iceServers:[
-    // STUN — multiple providers for fast NAT discovery
-    {urls:'stun:stun.l.google.com:19302'},
-    {urls:'stun:stun1.l.google.com:19302'},
-    {urls:'stun:stun2.l.google.com:19302'},
-    {urls:'stun:stun3.l.google.com:19302'},
-    {urls:'stun:stun4.l.google.com:19302'},
-    {urls:'stun:stun.cloudflare.com:3478'},
-    {urls:'stun:stun.ekiga.net'},
-    {urls:'stun:stun.ideasip.com'},
-    // TURN — relays for symmetric NAT / mobile data / firewalls (long-distance fallback)
-    {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
-    {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
-    {urls:'turn:openrelay.metered.ca:443?transport=tcp',username:'openrelayproject',credential:'openrelayproject'},
-    {urls:'turns:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
-    {urls:'turn:relay1.expressturn.com:3478',username:'efKNOFXZHF9PKAJLMG',credential:'9TRMhm8rjSHXeGNF'},
-  ],
-  iceCandidatePoolSize: 10,
-};
+let _iceCache = null;
+let _iceCacheTime = 0;
+async function _fetchIceServers() {
+  const now = Date.now();
+  if (_iceCache && now - _iceCacheTime < 5 * 60 * 1000) return _iceCache;
+  try {
+    const res = await fetch('https://nexuschatuk.metered.live/api/v1/turn/credentials?apiKey=zn6JtSFDXjuZj1gA0xQtcdZyBTIlyoWDQ0p2IXuqooeaQxOZ');
+    const servers = await res.json();
+    _iceCache = { iceServers: servers, iceCandidatePoolSize: 10 };
+    _iceCacheTime = now;
+    return _iceCache;
+  } catch(e) {
+    // fallback to Google STUN if fetch fails
+    return { iceServers: [{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}], iceCandidatePoolSize: 10 };
+  }
+}
 let _callState = null; // { callId, pc, localStream, remoteStream, type, role, peerId, pollTimer, wakeLock }
 let _callHeartbeatTimer = null; // keeps nx_calls row alive so both sides know call is ongoing
 let _callReconnectTimer = null; // ICE restart debounce
@@ -5004,7 +5000,7 @@ async function startCall(type){
   }
 
   const callId = _callUid();
-  const pc = new RTCPeerConnection(ICE_SERVERS);
+  const pc = new RTCPeerConnection(await _fetchIceServers());
   // Add tracks to peer connection — audio goes to remote only, never to local speakers
   localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
   // CRITICAL: ensure local audio is never played back (causes echo)
@@ -5230,7 +5226,7 @@ async function answerCall(callId){
     return toast('🎤','Permission denied','Allow microphone'+(callData.type==='video'?' and camera':'')+' access');
   }
 
-  const pc = new RTCPeerConnection(ICE_SERVERS);
+  const pc = new RTCPeerConnection(await _fetchIceServers());
   localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
   // CRITICAL: local audio must never play back through speakers
 
