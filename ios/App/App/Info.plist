@@ -2,12 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CAPACITOR_DEBUG</key>
+	<key>CAPACITOR_DEBUG</key>
 	<string>$(CAPACITOR_DEBUG)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>NexusChat</string>
+	<string>NexusChat</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -24,6 +24,21 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>NexusChat needs camera access to make video calls.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>NexusChat needs microphone access to make voice and video calls.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>NexusChat needs permission to save images to your photo library.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>NexusChat needs access to your photos so you can share images and set a profile picture.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>voip</string>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -47,30 +62,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-
-	<!-- Microphone — required for voice and video calls -->
-	<key>NSMicrophoneUsageDescription</key>
-	<string>NexusChat needs microphone access to make voice and video calls.</string>
-
-	<!-- Camera — required for video calls -->
-	<key>NSCameraUsageDescription</key>
-	<string>NexusChat needs camera access to make video calls.</string>
-
-	<!-- Photo Library read — required for sending photos and changing profile picture -->
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>NexusChat needs access to your photos so you can share images and set a profile picture.</string>
-
-	<!-- Photo Library add — required for saving received images -->
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>NexusChat needs permission to save images to your photo library.</string>
-
-	<!-- Background modes — keeps calls alive and audio playing when app is backgrounded -->
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-		<string>voip</string>
-		<string>fetch</string>
-		<string>remote-notification</string>
-	</array>
 </dict>
 </plist>
