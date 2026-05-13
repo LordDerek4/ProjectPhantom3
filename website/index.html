@@ -4971,18 +4971,37 @@ async function _startAdaptiveBitrate(pc, isVideo) {
 
 let _iceCache = null;
 let _iceCacheTime = 0;
+const _FALLBACK_ICE = {
+  iceServers:[
+    {urls:'stun:stun.l.google.com:19302'},
+    {urls:'stun:stun1.l.google.com:19302'},
+    {urls:'stun:stun2.l.google.com:19302'},
+    {urls:'stun:stun3.l.google.com:19302'},
+    {urls:'stun:stun4.l.google.com:19302'},
+    {urls:'stun:stun.cloudflare.com:3478'},
+    {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
+    {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
+    {urls:'turn:openrelay.metered.ca:443?transport=tcp',username:'openrelayproject',credential:'openrelayproject'},
+    {urls:'turns:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
+  ],
+  iceCandidatePoolSize:10
+};
 async function _fetchIceServers() {
   const now = Date.now();
   if (_iceCache && now - _iceCacheTime < 5 * 60 * 1000) return _iceCache;
   try {
     const res = await fetch('https://nexuschatuk.metered.live/api/v1/turn/credentials?apiKey=zn6JtSFDXjuZj1gA0xQtcdZyBTIlyoWDQ0p2IXuqooeaQxOZ');
     const servers = await res.json();
+    // Validate — must be an array of ICE server objects
+    if (!Array.isArray(servers) || !servers.length || servers[0].error) {
+      console.warn('Metered API error:', servers);
+      return _FALLBACK_ICE;
+    }
     _iceCache = { iceServers: servers, iceCandidatePoolSize: 10 };
     _iceCacheTime = now;
     return _iceCache;
   } catch(e) {
-    // fallback to Google STUN if fetch fails
-    return { iceServers: [{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}], iceCandidatePoolSize: 10 };
+    return _FALLBACK_ICE;
   }
 }
 let _callState = null; // { callId, pc, localStream, remoteStream, type, role, peerId, pollTimer, wakeLock }
