@@ -1137,8 +1137,7 @@ body::before{
   .ep-grid{grid-template-columns:repeat(9,1fr)}
   .res-list{max-height:200px}
   .sel-tags{max-height:60px;overflow-y:auto}
-  #call-ui{border-radius:20px 20px 0 0!important}
-  #incoming-call-ui{width:calc(100vw - 20px)!important;left:10px!important;right:10px!important}
+  /* call UI is full-screen on mobile — no overrides needed */
   .chat-item{padding:10px 10px;margin-bottom:2px}
   .ci-av{width:44px;height:44px}
   /* AI menu: fixed to viewport bottom so it's never clipped on mobile */
@@ -1175,6 +1174,73 @@ body::before{
     animation-iteration-count:1!important;
     transition-duration:0.01ms!important;
   }
+}
+
+/* ── DESKTOP / TABLET — 701px and up ── */
+@media(min-width:701px){
+  #app{display:flex;flex-direction:row;height:100vh;overflow:hidden}
+
+  /* Sidebar: fixed width, always visible */
+  .sidebar{
+    width:320px;min-width:280px;max-width:340px;flex-shrink:0;
+    position:relative;height:100%;overflow-y:auto;overflow-x:hidden;
+    border-right:1px solid var(--border);
+  }
+
+  /* Main chat area fills remaining space */
+  .main{flex:1;min-width:0;height:100%;overflow:hidden;display:flex;flex-direction:column}
+
+  /* Wider message bubbles on larger screens */
+  .msg-wrap{max-width:55%}
+
+  /* Settings/profile panels: centered floating card */
+  .profile-panel{max-width:480px;left:50%;transform:translateX(-50%);border-radius:var(--rad);box-shadow:var(--shadow-lg)}
+
+  /* Modals nicely centered on desktop */
+  .overlay{align-items:center!important;padding:24px}
+  .modal{border-radius:var(--rad)!important;max-height:85vh}
+  .mpp-card{border-radius:var(--rad)!important}
+
+  /* Auth screen: vertically centered card, not full height */
+  #auth{align-items:center;justify-content:center}
+  .auth-card{border-radius:var(--rad);max-width:420px;width:100%;margin:auto}
+
+  /* Toast: top-right, not bottom */
+  .toast-cont{top:20px;bottom:auto;right:20px;left:auto;max-width:340px}
+  .toast{width:auto;min-width:260px}
+
+  /* Chat header: more breathing room */
+  .chat-head{padding:14px 20px;gap:12px}
+  .ch-name{font-size:15px}
+
+  /* Sidebar heading padding */
+  .sb-head{padding:16px 16px 10px}
+
+  /* Input area */
+  .input-wrap{padding:10px 16px;padding-bottom:max(10px,env(safe-area-inset-bottom))}
+  .msg-input{font-size:14px}
+
+  /* Discover panel */
+  .discover-panel{padding:0 16px 40px}
+
+  /* Call UI — not full-screen sheet on desktop, centered card */
+  #call-ui{max-width:420px;left:50%!important;right:auto!important;transform:translateX(-50%);border-radius:24px;inset:auto;top:50%!important;transform:translate(-50%,-50%)!important;height:auto!important;min-height:500px}
+  #incoming-call-ui{max-width:380px;left:50%!important;right:auto!important;top:50%!important;transform:translate(-50%,-50%)!important;inset:auto;border-radius:24px;height:auto!important;min-height:440px;padding:48px 32px}
+}
+
+/* ── LARGE DESKTOP — 1100px and up ── */
+@media(min-width:1100px){
+  .sidebar{width:360px;max-width:380px}
+  .msg-wrap{max-width:50%}
+  .chat-head{padding:16px 28px}
+  .input-wrap{padding:12px 28px;padding-bottom:max(12px,env(safe-area-inset-bottom))}
+  .msgs-area{padding:16px 28px}
+}
+
+/* ── TABLET — 701px to 900px ── */
+@media(min-width:701px) and (max-width:900px){
+  .sidebar{width:280px;min-width:260px}
+  .msg-wrap{max-width:70%}
 }
 
 /* ════════════════════════════════════════
@@ -5174,10 +5240,14 @@ function _showIncomingCallUI(callId){
   const div=document.createElement('div');
   div.id='incoming-call-ui';
   div.style.cssText='position:fixed;inset:0;z-index:1000;background:linear-gradient(160deg,#0d1b3e 0%,#040912 55%,#0b1225 100%);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding-top:max(env(safe-area-inset-top,0px),60px);padding-bottom:max(env(safe-area-inset-bottom,0px),56px)';
-  const isVid=callData.type==='video';
+  var isVid=callData.type==='video';
+  var acceptIcon = isVid
+    ? '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>'
+    : '<svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.45 2 2 0 0 1 3.59 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
+  var callTypeLabel = isVid ? 'Video' : 'Voice';
   div.innerHTML=`
     <div style="text-align:center;display:flex;flex-direction:column;align-items:center">
-      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:36px">Incoming ${isVid?'Video':'Voice'} Call</div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:36px">Incoming ${callTypeLabel} Call</div>
       <div style="position:relative;width:140px;height:140px;display:flex;align-items:center;justify-content:center;margin-bottom:28px">
         <div style="position:absolute;inset:0;border-radius:50%;background:rgba(26,108,245,.2);animation:_cRipple 2.2s ease-out infinite"></div>
         <div style="position:absolute;inset:-22px;border-radius:50%;background:rgba(26,108,245,.1);animation:_cRipple 2.2s ease-out infinite .75s"></div>
@@ -5198,10 +5268,7 @@ function _showIncomingCallUI(callId){
       </div>
       <div class="cbw">
         <button onclick="answerCall('${escStr(callId)}')" class="cb" style="width:74px;height:74px;border-radius:50%;background:linear-gradient(145deg,#3ddc97,#1db874);box-shadow:0 4px 28px rgba(61,220,151,.55)">
-          ${isVid
-            ?'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>'
-            :'<svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.45 2 2 0 0 1 3.59 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'
-          }
+          ${acceptIcon}
         </button>
         <span class="cbl" style="font-size:13px;margin-top:2px">Accept</span>
       </div>
@@ -5378,64 +5445,52 @@ function _endCallCleanup(reason){
 function _showCallUI(type, peer, status){
   document.getElementById('call-ui')?.remove();
   const isVideo=type==='video', isCalling=status==='calling';
+
+  // Pre-build conditional HTML strings — no nested template literals (breaks iOS WebView)
+  var bgHtml = isVideo
+    ? '<video id="remote-video" autoplay playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video><div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.55) 0%,transparent 35%,transparent 55%,rgba(0,0,0,.75) 100%)"></div><video id="local-video" autoplay playsinline muted style="position:absolute;top:max(env(safe-area-inset-top,0px),56px);right:16px;width:96px;height:144px;object-fit:cover;border-radius:18px;border:2px solid rgba(255,255,255,.3);z-index:4;box-shadow:0 4px 24px rgba(0,0,0,.6)"></video>'
+    : '<div style="position:absolute;inset:0;background:linear-gradient(160deg,#0d1b3e 0%,#040912 55%,#0b1225 100%)"></div><div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 38%,rgba(26,108,245,.22) 0%,transparent 62%)"></div>';
+
+  var rippleHtml = isCalling
+    ? '<div style="position:absolute;inset:0;border-radius:50%;background:rgba(26,108,245,.18);animation:_cRipple 2s ease-out infinite"></div><div style="position:absolute;inset:-20px;border-radius:50%;background:rgba(26,108,245,.1);animation:_cRipple 2s ease-out infinite .7s"></div><div style="position:absolute;inset:-40px;border-radius:50%;background:rgba(26,108,245,.05);animation:_cRipple 2s ease-out infinite 1.4s"></div>'
+    : '';
+
+  var avSize = isCalling ? '100px' : '104px';
+  var wrapSize = isCalling ? '128px' : '104px';
+  var ringOpacity = isCalling ? '.25' : '.18';
+  var statusTxt = isCalling ? 'Calling...' : 'Connected';
+
+  var camHtml = isVideo
+    ? '<div class="cbw"><button id="cam-btn" onclick="toggleCamCall(this)" class="cb" style="width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.13)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></button><span class="cbl">Camera</span></div>'
+    : '';
+
   const div=document.createElement('div'); div.id='call-ui';
   div.style.cssText='position:fixed;inset:0;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding-bottom:0';
-  div.innerHTML=`
-    ${isVideo
-      ?`<video id="remote-video" autoplay playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
-        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.55) 0%,transparent 35%,transparent 55%,rgba(0,0,0,.75) 100%)"></div>
-        <video id="local-video" autoplay playsinline muted style="position:absolute;top:max(env(safe-area-inset-top,0px),56px);right:16px;width:96px;height:144px;object-fit:cover;border-radius:18px;border:2px solid rgba(255,255,255,.3);z-index:4;box-shadow:0 4px 24px rgba(0,0,0,.6)"></video>`
-      :`<div style="position:absolute;inset:0;background:linear-gradient(160deg,#0d1b3e 0%,#040912 55%,#0b1225 100%)"></div>
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 38%,rgba(26,108,245,.22) 0%,transparent 62%)"></div>`
-    }
-    <div style="position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;padding-top:max(env(safe-area-inset-top,0px),52px);padding-bottom:24px">
-      <div style="position:relative;width:${isCalling?'128px':'104px'};height:${isCalling?'128px':'104px'};display:flex;align-items:center;justify-content:center;margin-bottom:22px">
-        ${isCalling?`
-          <div style="position:absolute;inset:0;border-radius:50%;background:rgba(26,108,245,.18);animation:_cRipple 2s ease-out infinite"></div>
-          <div style="position:absolute;inset:-20px;border-radius:50%;background:rgba(26,108,245,.1);animation:_cRipple 2s ease-out infinite .7s"></div>
-          <div style="position:absolute;inset:-40px;border-radius:50%;background:rgba(26,108,245,.05);animation:_cRipple 2s ease-out infinite 1.4s"></div>`:''}
-        <div style="width:${isCalling?'100px':'104px'};height:${isCalling?'100px':'104px'};border-radius:50%;overflow:hidden;box-shadow:0 0 0 3px rgba(255,255,255,${isCalling?'.25':'.18'}),0 8px 36px rgba(0,0,0,.55)">
-          ${avatarEl(peer,104)}
-        </div>
-      </div>
-      <div style="font-size:24px;font-weight:700;color:#fff;letter-spacing:-.4px;text-shadow:0 2px 12px rgba(0,0,0,.5)">${escHtml(peer.username)}</div>
-      <div id="call-status-txt" style="font-size:13px;color:rgba(255,255,255,.5);margin-top:7px;letter-spacing:.3px">${isCalling?'Calling...':'Connected'}</div>
-      <div id="call-timer" style="font-size:16px;font-weight:500;color:rgba(255,255,255,.85);margin-top:5px;font-variant-numeric:tabular-nums;font-family:var(--mono);letter-spacing:1px"></div>
-    </div>
-    <div style="position:relative;z-index:3;width:100%;padding:0 20px;padding-bottom:max(env(safe-area-inset-bottom,0px),28px)">
-      <div style="background:rgba(20,28,56,.75);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,.1);border-radius:32px;padding:22px 28px 22px;display:flex;align-items:center;justify-content:space-around">
-        <div class="cbw">
-          <button id="mute-btn" onclick="toggleMuteCall(this)" class="cb" style="width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.13)">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-          </button>
-          <span class="cbl">Mute</span>
-        </div>
-        ${isVideo?`<div class="cbw">
-          <button id="cam-btn" onclick="toggleCamCall(this)" class="cb" style="width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.13)">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-          </button>
-          <span class="cbl">Camera</span>
-        </div>`:''}
-        <div class="cbw">
-          <button onclick="hangUp()" class="cb" style="width:68px;height:68px;border-radius:50%;background:linear-gradient(145deg,#f0607a,#c93055);box-shadow:0 4px 28px rgba(240,96,122,.55)">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.27-.27.67-.36 1.02-.22 1.12.43 2.32.66 3.58.66.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.29 21 3 13.71 3 4.5c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.26.23 2.46.66 3.58.13.34.04.74-.22 1.02L6.6 10.8z"/></svg>
-          </button>
-          <span class="cbl">End</span>
-        </div>
-        <div class="cbw">
-          <button id="spk-btn" onclick="toggleSpeaker(this)" class="cb" style="width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.13)">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-          </button>
-          <span class="cbl">Speaker</span>
-        </div>
-      </div>
-    </div>
-  `;
+  div.innerHTML=bgHtml+
+    '<div style="position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;padding-top:max(env(safe-area-inset-top,0px),52px);padding-bottom:24px">'+
+      '<div style="position:relative;width:'+wrapSize+';height:'+wrapSize+';display:flex;align-items:center;justify-content:center;margin-bottom:22px">'+
+        rippleHtml+
+        '<div style="width:'+avSize+';height:'+avSize+';border-radius:50%;overflow:hidden;box-shadow:0 0 0 3px rgba(255,255,255,'+ringOpacity+'),0 8px 36px rgba(0,0,0,.55)">'+
+          avatarEl(peer,104)+
+        '</div>'+
+      '</div>'+
+      '<div style="font-size:24px;font-weight:700;color:#fff;letter-spacing:-.4px;text-shadow:0 2px 12px rgba(0,0,0,.5)">'+escHtml(peer.username)+'</div>'+
+      '<div id="call-status-txt" style="font-size:13px;color:rgba(255,255,255,.5);margin-top:7px;letter-spacing:.3px">'+statusTxt+'</div>'+
+      '<div id="call-timer" style="font-size:16px;font-weight:500;color:rgba(255,255,255,.85);margin-top:5px;font-variant-numeric:tabular-nums;font-family:var(--mono);letter-spacing:1px"></div>'+
+    '</div>'+
+    '<div style="position:relative;z-index:3;width:100%;padding:0 20px;padding-bottom:max(env(safe-area-inset-bottom,0px),28px)">'+
+      '<div style="background:rgba(20,28,56,.75);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,.1);border-radius:32px;padding:22px 28px;display:flex;align-items:center;justify-content:space-around">'+
+        '<div class="cbw"><button id="mute-btn" onclick="toggleMuteCall(this)" class="cb" style="width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.13)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button><span class="cbl">Mute</span></div>'+
+        camHtml+
+        '<div class="cbw"><button onclick="hangUp()" class="cb" style="width:68px;height:68px;border-radius:50%;background:linear-gradient(145deg,#f0607a,#c93055);box-shadow:0 4px 28px rgba(240,96,122,.55)"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.27-.27.67-.36 1.02-.22 1.12.43 2.32.66 3.58.66.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.29 21 3 13.71 3 4.5c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.26.23 2.46.66 3.58.13.34.04.74-.22 1.02L6.6 10.8z"/></svg></button><span class="cbl">End</span></div>'+
+        '<div class="cbw"><button id="spk-btn" onclick="toggleSpeaker(this)" class="cb" style="width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.13)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button><span class="cbl">Speaker</span></div>'+
+      '</div>'+
+    '</div>';
   document.body.appendChild(div);
-  if(isVideo && _callState?.localStream){
-    setTimeout(()=>{
-      const lv=document.getElementById('local-video');
-      if(lv){lv.srcObject=_callState.localStream;lv.play().catch(()=>{});}
+  if(isVideo && _callState && _callState.localStream){
+    setTimeout(function(){
+      var lv=document.getElementById('local-video');
+      if(lv){lv.srcObject=_callState.localStream;lv.play().catch(function(){});}
     },100);
   }
   if(status==='active') _startCallTimer();
