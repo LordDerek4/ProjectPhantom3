@@ -3684,7 +3684,7 @@ function renderChatArea(){
         <button class="ib mob-hide" onclick="openDisappearTimerPicker('${room.id}')" title="Disappearing messages">⏱️</button>
         <button class="ib mob-hide" onclick="renameRoom('${room.id}')" title="Rename chat">✏️</button>
         <button class="ib" onclick="toggleChatSearch()" title="Search">🔍</button>
-        ${room.type==='direct'?'<button class="ib" onclick="simulateCall('voice')" title="Voice call">📞</button><button class="ib" onclick="simulateCall('video')" title="Video call">📹</button>':''}
+        ${room.type==='direct'?'<button class="ib" onclick="simulateCall(&apos;voice&apos;)" title="Voice call">📞</button><button class="ib" onclick="simulateCall(&apos;video&apos;)" title="Video call">📹</button>':''}
         <button class="ib" onclick="toggleProfile()">ℹ️</button>
         <button class="ib ch-back" onclick="backToSidebar()" title="Back">←</button>
       </div>
