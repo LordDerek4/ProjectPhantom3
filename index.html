@@ -5162,26 +5162,45 @@ async function _pollIncomingCalls(){
 
 function _showIncomingCallUI(callId){
   document.getElementById('incoming-call-ui')?.remove();
-  const callData = _pendingCallsMap[callId]; if(!callData) return;
-  const caller = getUser(callData.caller_id);
+  const callData=_pendingCallsMap[callId]; if(!callData) return;
+  const caller=getUser(callData.caller_id);
   _startRing();
-  _showCallNotification(caller.username||'Someone', callData.type||'voice');
-  // Vibrate phone: 3 pulses of 500ms with 300ms gaps
+  _showCallNotification(caller.username||'Someone',callData.type||'voice');
   if(navigator.vibrate) navigator.vibrate([500,300,500,300,500]);
-  const div = document.createElement('div');
-  div.id = 'incoming-call-ui';
-  div.style.cssText=`position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;animation:fadeIn .3s ease`;
+  const div=document.createElement('div');
+  div.id='incoming-call-ui';
+  div.style.cssText='position:fixed;inset:0;z-index:1000;background:linear-gradient(160deg,#0d1b3e 0%,#040912 55%,#0b1225 100%);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding-top:max(env(safe-area-inset-top,0px),60px);padding-bottom:max(env(safe-area-inset-bottom,0px),56px)';
+  const isVid=callData.type==='video';
   div.innerHTML=`
-    <div style="width:90px;height:90px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 4px var(--acc),0 0 0 8px rgba(93,106,240,.2)">
-      ${avatarEl(caller,90)}
+    <div style="text-align:center;display:flex;flex-direction:column;align-items:center">
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:36px">Incoming ${isVid?'Video':'Voice'} Call</div>
+      <div style="position:relative;width:140px;height:140px;display:flex;align-items:center;justify-content:center;margin-bottom:28px">
+        <div style="position:absolute;inset:0;border-radius:50%;background:rgba(26,108,245,.2);animation:_cRipple 2.2s ease-out infinite"></div>
+        <div style="position:absolute;inset:-22px;border-radius:50%;background:rgba(26,108,245,.1);animation:_cRipple 2.2s ease-out infinite .75s"></div>
+        <div style="position:absolute;inset:-44px;border-radius:50%;background:rgba(26,108,245,.05);animation:_cRipple 2.2s ease-out infinite 1.5s"></div>
+        <div style="width:120px;height:120px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 4px rgba(26,108,245,.55),0 12px 44px rgba(0,0,0,.65)">
+          ${avatarEl(caller,120)}
+        </div>
+      </div>
+      <div style="font-size:26px;font-weight:700;color:#fff;letter-spacing:-.5px">${escHtml(caller.username)}</div>
+      <div style="font-size:14px;color:rgba(255,255,255,.4);margin-top:8px">@${escHtml(caller.handle||caller.username||'')}</div>
     </div>
-    <div style="text-align:center">
-      <div style="font-size:22px;font-weight:700;color:#fff;margin-bottom:4px">${escHtml(caller.username)}</div>
-      <div style="font-size:14px;color:rgba(255,255,255,.6)">Incoming ${escHtml(callData.type)} call...</div>
-    </div>
-    <div style="display:flex;gap:24px;margin-top:8px">
-      <button onclick="declineCall('${escStr(callId)}')" style="width:66px;height:66px;border-radius:50%;background:#f0607a;border:none;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(240,96,122,.5)">📵</button>
-      <button onclick="answerCall('${escStr(callId)}')" style="width:66px;height:66px;border-radius:50%;background:#3ddc97;border:none;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(61,220,151,.5)">${callData.type==='video'?'📹':'📞'}</button>
+    <div style="display:flex;gap:64px;align-items:flex-end">
+      <div class="cbw">
+        <button onclick="declineCall('${escStr(callId)}')" class="cb" style="width:74px;height:74px;border-radius:50%;background:linear-gradient(145deg,#f0607a,#c93055);box-shadow:0 4px 28px rgba(240,96,122,.55)">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.27-.27.67-.36 1.02-.22 1.12.43 2.32.66 3.58.66.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.29 21 3 13.71 3 4.5c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.26.23 2.46.66 3.58.13.34.04.74-.22 1.02L6.6 10.8z"/></svg>
+        </button>
+        <span class="cbl" style="font-size:13px;margin-top:2px">Decline</span>
+      </div>
+      <div class="cbw">
+        <button onclick="answerCall('${escStr(callId)}')" class="cb" style="width:74px;height:74px;border-radius:50%;background:linear-gradient(145deg,#3ddc97,#1db874);box-shadow:0 4px 28px rgba(61,220,151,.55)">
+          ${isVid
+            ?`<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>`
+            :`<svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.45 2 2 0 0 1 3.59 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`
+          }
+        </button>
+        <span class="cbl" style="font-size:13px;margin-top:2px">Accept</span>
+      </div>
     </div>
   `;
   document.body.appendChild(div);
@@ -5354,34 +5373,81 @@ function _endCallCleanup(reason){
 
 function _showCallUI(type, peer, status){
   document.getElementById('call-ui')?.remove();
+  if(!document.getElementById('_call-styles')){
+    const s=document.createElement('style');s.id='_call-styles';
+    s.textContent=`
+      @keyframes _cRipple{0%{transform:scale(1);opacity:.55}100%{transform:scale(2.4);opacity:0}}
+      @keyframes _cFadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+      #call-ui{animation:_cFadeUp .35s ease}
+      #incoming-call-ui{animation:_cFadeUp .35s ease}
+      .cbw{display:flex;flex-direction:column;align-items:center;gap:7px}
+      .cb{border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s,background .2s}
+      .cb:active{transform:scale(.9)}
+      .cbl{font-size:11px;color:rgba(255,255,255,.5);font-family:var(--font);letter-spacing:.2px}
+    `;
+    document.head.appendChild(s);
+  }
+  const isVideo=type==='video', isCalling=status==='calling';
   const div=document.createElement('div'); div.id='call-ui';
-  div.style.cssText=`position:fixed;inset:0;z-index:999;background:#0a0b11;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:60px 24px 50px;animation:fadeIn .3s ease`;
+  div.style.cssText='position:fixed;inset:0;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding-bottom:0';
   div.innerHTML=`
-    ${type==='video'?`<video id="remote-video" autoplay playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85"></video><video id="local-video" autoplay playsinline muted style="position:absolute;bottom:100px;right:20px;width:110px;height:160px;object-fit:cover;border-radius:14px;border:2px solid rgba(255,255,255,.2);z-index:2"></video>`:'<div id="audio-call-bg" style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(93,106,240,.15),transparent 70%)"></div>'}
-    <div style="position:relative;z-index:3;text-align:center">
-      <div style="width:90px;height:90px;border-radius:50%;overflow:hidden;margin:0 auto 14px;box-shadow:0 0 0 3px rgba(93,106,240,.5)">
-        ${avatarEl(peer,90)}
+    ${isVideo
+      ?`<video id="remote-video" autoplay playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.55) 0%,transparent 35%,transparent 55%,rgba(0,0,0,.75) 100%)"></div>
+        <video id="local-video" autoplay playsinline muted style="position:absolute;top:max(env(safe-area-inset-top,0px),56px);right:16px;width:96px;height:144px;object-fit:cover;border-radius:18px;border:2px solid rgba(255,255,255,.3);z-index:4;box-shadow:0 4px 24px rgba(0,0,0,.6)"></video>`
+      :`<div style="position:absolute;inset:0;background:linear-gradient(160deg,#0d1b3e 0%,#040912 55%,#0b1225 100%)"></div>
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 38%,rgba(26,108,245,.22) 0%,transparent 62%)"></div>`
+    }
+    <div style="position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;padding-top:max(env(safe-area-inset-top,0px),52px);padding-bottom:24px">
+      <div style="position:relative;width:${isCalling?'128px':'104px'};height:${isCalling?'128px':'104px'};display:flex;align-items:center;justify-content:center;margin-bottom:22px">
+        ${isCalling?`
+          <div style="position:absolute;inset:0;border-radius:50%;background:rgba(26,108,245,.18);animation:_cRipple 2s ease-out infinite"></div>
+          <div style="position:absolute;inset:-20px;border-radius:50%;background:rgba(26,108,245,.1);animation:_cRipple 2s ease-out infinite .7s"></div>
+          <div style="position:absolute;inset:-40px;border-radius:50%;background:rgba(26,108,245,.05);animation:_cRipple 2s ease-out infinite 1.4s"></div>`:''}
+        <div style="width:${isCalling?'100px':'104px'};height:${isCalling?'100px':'104px'};border-radius:50%;overflow:hidden;box-shadow:0 0 0 3px rgba(255,255,255,${isCalling?'.25':'.18'}),0 8px 36px rgba(0,0,0,.55)">
+          ${avatarEl(peer,104)}
+        </div>
       </div>
-      <div style="font-size:22px;font-weight:700;color:#fff">${escHtml(peer.username)}</div>
-      <div id="call-status-txt" style="font-size:13px;color:rgba(255,255,255,.55);margin-top:5px">${status==='calling'?'Calling...':'Connected'}</div>
-      <div id="call-timer" style="font-size:14px;color:rgba(255,255,255,.7);margin-top:4px;font-family:'JetBrains Mono',monospace"></div>
+      <div style="font-size:24px;font-weight:700;color:#fff;letter-spacing:-.4px;text-shadow:0 2px 12px rgba(0,0,0,.5)">${escHtml(peer.username)}</div>
+      <div id="call-status-txt" style="font-size:13px;color:rgba(255,255,255,.5);margin-top:7px;letter-spacing:.3px">${isCalling?'Calling...':'Connected'}</div>
+      <div id="call-timer" style="font-size:16px;font-weight:500;color:rgba(255,255,255,.85);margin-top:5px;font-variant-numeric:tabular-nums;font-family:var(--mono);letter-spacing:1px"></div>
     </div>
-    <div style="position:relative;z-index:3;display:flex;gap:20px;align-items:center">
-      <button id="mute-btn" onclick="toggleMuteCall(this)" style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.12);border:none;font-size:22px;cursor:pointer;color:#fff" title="Mute">🎤</button>
-      ${type==='video'?`<button id="cam-btn" onclick="toggleCamCall(this)" style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.12);border:none;font-size:22px;cursor:pointer;color:#fff" title="Camera">📷</button>`:''}
-      <button onclick="hangUp()" style="width:68px;height:68px;border-radius:50%;background:#f0607a;border:none;font-size:28px;cursor:pointer;box-shadow:0 4px 20px rgba(240,96,122,.5)" title="Hang up">📵</button>
-      <button onclick="toggleSpeaker(this)" style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.12);border:none;font-size:22px;cursor:pointer;color:#fff" title="Speaker">🔈</button>
+    <div style="position:relative;z-index:3;width:100%;padding:0 20px;padding-bottom:max(env(safe-area-inset-bottom,0px),28px)">
+      <div style="background:rgba(20,28,56,.75);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,.1);border-radius:32px;padding:22px 28px 22px;display:flex;align-items:center;justify-content:space-around">
+        <div class="cbw">
+          <button id="mute-btn" onclick="toggleMuteCall(this)" class="cb" style="width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.13)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
+          <span class="cbl">Mute</span>
+        </div>
+        ${isVideo?`<div class="cbw">
+          <button id="cam-btn" onclick="toggleCamCall(this)" class="cb" style="width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.13)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+          </button>
+          <span class="cbl">Camera</span>
+        </div>`:''}
+        <div class="cbw">
+          <button onclick="hangUp()" class="cb" style="width:68px;height:68px;border-radius:50%;background:linear-gradient(145deg,#f0607a,#c93055);box-shadow:0 4px 28px rgba(240,96,122,.55)">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.27-.27.67-.36 1.02-.22 1.12.43 2.32.66 3.58.66.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.29 21 3 13.71 3 4.5c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.26.23 2.46.66 3.58.13.34.04.74-.22 1.02L6.6 10.8z"/></svg>
+          </button>
+          <span class="cbl">End</span>
+        </div>
+        <div class="cbw">
+          <button id="spk-btn" onclick="toggleSpeaker(this)" class="cb" style="width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.13)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          </button>
+          <span class="cbl">Speaker</span>
+        </div>
+      </div>
     </div>
   `;
   document.body.appendChild(div);
-  // Attach local video if video call — use setTimeout to ensure DOM is ready
-  if(type==='video' && _callState?.localStream){
+  if(isVideo && _callState?.localStream){
     setTimeout(()=>{
-      const lv = document.getElementById('local-video');
-      if(lv){ lv.srcObject = _callState.localStream; lv.play().catch(()=>{}); }
-    }, 100);
+      const lv=document.getElementById('local-video');
+      if(lv){lv.srcObject=_callState.localStream;lv.play().catch(()=>{});}
+    },100);
   }
-  // Start call timer when active
   if(status==='active') _startCallTimer();
 }
 
@@ -5481,19 +5547,22 @@ function toggleMuteCall(btn){
   if(!_callState?.localStream)return;
   const track=_callState.localStream.getAudioTracks()[0]; if(!track)return;
   track.enabled=!track.enabled;
-  btn.style.background=track.enabled?'rgba(255,255,255,.12)':'rgba(240,96,122,.4)';
-  btn.textContent=track.enabled?'🎤':'🔇';
+  btn.style.background=track.enabled?'rgba(255,255,255,.13)':'rgba(240,96,122,.45)';
+  btn.style.boxShadow=track.enabled?'none':'0 0 0 2px rgba(240,96,122,.4)';
 }
 function toggleCamCall(btn){
   if(!_callState?.localStream)return;
   const track=_callState.localStream.getVideoTracks()[0]; if(!track)return;
   track.enabled=!track.enabled;
-  btn.style.background=track.enabled?'rgba(255,255,255,.12)':'rgba(240,96,122,.4)';
-  btn.textContent=track.enabled?'📷':'🚫';
+  btn.style.background=track.enabled?'rgba(255,255,255,.13)':'rgba(240,96,122,.45)';
+  btn.style.boxShadow=track.enabled?'none':'0 0 0 2px rgba(240,96,122,.4)';
 }
 function toggleSpeaker(btn){
   const a=document.getElementById('remote-audio')||document.getElementById('remote-video');
-  if(a){ a.muted=!a.muted; btn.textContent=a.muted?'🔇':'🔈'; }
+  if(!a)return;
+  a.muted=!a.muted;
+  btn.style.background=a.muted?'rgba(240,96,122,.45)':'rgba(255,255,255,.13)';
+  btn.style.boxShadow=a.muted?'0 0 0 2px rgba(240,96,122,.4)':'none';
 }
 
 // Poll for incoming calls every 4 seconds when not in a call
