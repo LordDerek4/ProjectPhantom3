@@ -1,12 +1,12 @@
 {
   "name": "NexusChat",
   "short_name": "NexusChat",
-  "description": "Real-time messaging app",
-  "start_url": "/NexusChat/nexuschat_light.html",
+  "description": "Real-time messaging — connect, call, and share with anyone.",
+  "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#ffffff",
-  "theme_color": "#6c63ff",
+  "background_color": "#040912",
+  "theme_color": "#040912",
   "icons": [
     {
       "src": "nexuschat-logo.svg",
