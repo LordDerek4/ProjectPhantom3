@@ -1,4 +1,4 @@
-const CACHE = 'nexuschat-v3';
+const CACHE = 'nexuschat-v4';
 const ASSETS = [
   '/',
   '/index.html',
