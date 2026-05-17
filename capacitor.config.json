@@ -1,8 +1,0 @@
-{
-  "appId": "com.nexuschat.app",
-  "appName": "NexusChat",
-  "webDir": "www",
-  "ios": {
-    "backgroundColor": "#1a1a2e"
-  }
-}
