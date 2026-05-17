@@ -47,7 +47,7 @@
 
   --txt1:#ffffff;
   --txt2:#ffffff;
-  --txt3:rgba(255,255,255,0.75);
+  --txt3:rgba(255,255,255,0.90);
 
   --acc:#7c3aed;
   --acc2:#5b21b6;
@@ -134,6 +134,14 @@ body::before{
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(124,58,237,.35);border-radius:4px}
+
+/* Bright white text shadow for lavender background */
+.ci-name,.ci-last,.ci-time,.sb-tab,.sb-empty,
+.disc-section-title,.duca-name,.duca-status,.disc-tool-label,.disc-no-res,.disc-filter,
+.cc-name,.cc-handle,.cc-offline,.cc-online,.contacts-empty,
+.sb-search input,.disc-search{
+  text-shadow:0 1px 4px rgba(80,20,120,0.55),0 0 2px rgba(60,10,100,0.35);
+}
 
 /* ══════════════════════════════════════════
    AUTH SCREEN
