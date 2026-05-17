@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -82,6 +82,31 @@
 }
 
 
+/* ── Lavender animated background ── */
+#bg-canvas{position:fixed;inset:0;z-index:-2;background:#c8b2ea;overflow:hidden}
+#bg-canvas span{position:absolute;border-radius:50%;filter:blur(80px);will-change:transform;animation:lavSwirl linear infinite}
+#bg-canvas span:nth-child(1){
+  width:55vmax;height:55vmax;
+  background:radial-gradient(circle,rgba(255,255,255,.95) 0%,rgba(230,160,190,.7) 35%,transparent 70%);
+  top:-5%;left:10%;animation-duration:14s}
+#bg-canvas span:nth-child(2){
+  width:45vmax;height:45vmax;
+  background:radial-gradient(circle,rgba(80,60,200,.85) 0%,rgba(100,70,210,.5) 40%,transparent 70%);
+  top:15%;left:30%;animation-duration:11s;animation-delay:-4s}
+#bg-canvas span:nth-child(3){
+  width:38vmax;height:38vmax;
+  background:radial-gradient(circle,rgba(235,110,130,.8) 0%,rgba(210,90,110,.45) 40%,transparent 70%);
+  top:25%;left:20%;animation-duration:16s;animation-delay:-8s}
+#bg-canvas span:nth-child(4){
+  width:60vmax;height:60vmax;
+  background:radial-gradient(circle,rgba(180,150,240,.4) 0%,transparent 65%);
+  top:30%;left:-10%;animation-duration:20s;animation-delay:-2s}
+@keyframes lavSwirl{
+  0%,100%{transform:translate(0,0) rotate(0deg) scale(1)}
+  25%{transform:translate(4vw,-3vw) rotate(90deg) scale(1.08)}
+  50%{transform:translate(-3vw,5vw) rotate(180deg) scale(.93)}
+  75%{transform:translate(-5vw,-4vw) rotate(270deg) scale(1.04)}
+}
 html{position:relative;overflow:hidden}
 
 html,body{
@@ -1629,7 +1654,8 @@ body::before{
 </style>
 </head>
 <body>
-<video id="bg-video" autoplay muted loop playsinline style="position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;pointer-events:none;opacity:0.55;"><source src="design.mp4" type="video/mp4"></video>
+<div id="bg-canvas"><span></span><span></span><span></span><span></span></div>
+
 
 <!-- AUTH SCREEN -->
 <div id="auth">
