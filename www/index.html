@@ -137,20 +137,20 @@ body::before{
 ::-webkit-scrollbar-thumb{background:rgba(124,58,237,.35);border-radius:4px}
 
 /* ── PAYWALL ── */
-#paywall{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(12,5,30,0.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
-.paywall-card{position:relative;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:28px;padding:40px 32px;max-width:400px;width:100%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,0.5)}
-.paywall-logo{width:72px;height:72px;border-radius:20px;margin:0 auto 20px;box-shadow:0 8px 24px rgba(124,58,237,0.4)}
-.paywall-title{font-size:24px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-.4px}
-.paywall-sub{font-size:14px;color:rgba(255,255,255,0.75);margin-bottom:28px;line-height:1.6}
-.paywall-price{font-size:44px;font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:4px}
-.paywall-price-sub{font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:28px}
-.paywall-features{text-align:left;margin-bottom:28px;display:flex;flex-direction:column;gap:10px}
-.paywall-feature{display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(255,255,255,0.85)}
-.paywall-feature span{width:22px;height:22px;border-radius:50%;background:rgba(124,58,237,0.3);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
-.paywall-btn{width:100%;padding:16px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:16px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(124,58,237,0.5);transition:all .2s;margin-bottom:12px;font-family:var(--font)}
+#paywall{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(12,5,30,0.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);overflow-y:auto}
+.paywall-card{position:relative;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:24px;padding:44px 28px 28px;max-width:400px;width:100%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,0.5);margin:auto}
+.paywall-logo{width:56px;height:56px;border-radius:16px;margin:0 auto 14px;box-shadow:0 8px 24px rgba(124,58,237,0.4)}
+.paywall-title{font-size:20px;font-weight:800;color:#fff;margin-bottom:6px;letter-spacing:-.4px}
+.paywall-sub{font-size:13px;color:rgba(255,255,255,0.75);margin-bottom:16px;line-height:1.5}
+.paywall-price{font-size:36px;font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:2px}
+.paywall-price-sub{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:16px}
+.paywall-features{text-align:left;margin-bottom:20px;display:flex;flex-direction:column;gap:8px}
+.paywall-feature{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.85)}
+.paywall-feature span{width:20px;height:20px;border-radius:50%;background:rgba(124,58,237,0.3);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.paywall-btn{width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(124,58,237,0.5);transition:all .2s;margin-bottom:10px;font-family:var(--font)}
 .paywall-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(124,58,237,0.6)}
 .paywall-btn:active{transform:scale(.98)}
-.paywall-verify{width:100%;padding:12px;background:transparent;color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.15);border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:var(--font)}
+.paywall-verify{width:100%;padding:11px;background:transparent;color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.15);border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:var(--font)}
 .paywall-verify:hover{background:rgba(255,255,255,0.06);color:#fff}
 
 /* Bright white text shadow for lavender background */
