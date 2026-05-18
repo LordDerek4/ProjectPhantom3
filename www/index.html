@@ -6922,6 +6922,7 @@ function showPaywall(){
       </div>
       <button class="paywall-btn" onclick="_paywallPay()">Pay with Stripe — £4.99</button>
       <button class="paywall-verify" onclick="_paywallVerify(this)">I've already paid</button>
+      <button class="paywall-verify" style="margin-top:8px;border-color:transparent;color:rgba(255,255,255,0.4);font-size:12px" onclick="signOut()">← Back to login</button>
     </div>`;
   document.body.appendChild(el);
 }
