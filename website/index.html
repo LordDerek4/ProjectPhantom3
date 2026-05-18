@@ -6909,7 +6909,7 @@ function showPaywall(){
   el.id = 'paywall';
   el.innerHTML = `
     <div class="paywall-card">
-      <button onclick="signOut()" style="position:absolute;top:16px;left:16px;background:transparent;border:none;color:rgba(255,255,255,0.5);font-size:13px;cursor:pointer;font-family:var(--font);padding:4px 8px;border-radius:8px" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">← Back</button>
+      <button onclick="_paywallBack()" style="position:absolute;top:16px;left:16px;background:transparent;border:none;color:rgba(255,255,255,0.5);font-size:13px;cursor:pointer;font-family:var(--font);padding:4px 8px;border-radius:8px" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">← Back</button>
       <img class="paywall-logo" src="nexuschat-logo.svg" alt="NexusChat">
       <div class="paywall-title">Unlock NexusChat</div>
       <div class="paywall-sub">One-time purchase — pay once, use forever on any browser.</div>
@@ -6925,6 +6925,11 @@ function showPaywall(){
       <button class="paywall-verify" onclick="_paywallVerify(this)">I've already paid</button>
     </div>`;
   document.body.appendChild(el);
+}
+
+function _paywallBack(){
+  document.getElementById('paywall')?.remove();
+  signOut();
 }
 
 function _paywallPay(){
